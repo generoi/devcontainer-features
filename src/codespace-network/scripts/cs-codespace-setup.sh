@@ -70,7 +70,7 @@ NPMRC"
 fi
 
 # --- Tools ---
-npx playwright install --with-deps chromium
+npx -y playwright install --with-deps chromium
 curl -fsSL https://claude.ai/install.sh | bash
 
 # --- Dependencies & build ---

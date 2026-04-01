@@ -42,9 +42,8 @@ cs_net_resolve_hosts() {
 
   if [ "$CS_NET_MODE" = "github" ]; then
     local fwd_domain="${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-app.github.dev}"
-    # DDEV in Codespaces uses port 8080 (HTTP) since the router is disabled.
     # GitHub Codespace port forwarding adds HTTPS on top.
-    CS_NET_TARGET_HOSTS[main]="${CODESPACE_NAME}-8080.${fwd_domain}"
+    CS_NET_TARGET_HOSTS[main]="${CODESPACE_NAME}-80.${fwd_domain}"
   else
     cs_net_parse_pairs "$CS_NET_HOSTS"
     for key in "${!CS_NET_PARSED[@]}"; do
