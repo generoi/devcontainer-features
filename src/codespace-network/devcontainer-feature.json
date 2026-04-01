@@ -1,0 +1,32 @@
+{
+  "name": "Codespace Network",
+  "id": "codespace-network",
+  "version": "1.0.0",
+  "description": "Configures Codespace networking for DDEV WordPress projects. Supports GitHub port forwarding and Cloudflare named tunnels.",
+  "options": {
+    "mode": {
+      "type": "string",
+      "enum": ["github", "cloudflare"],
+      "default": "github",
+      "description": "Networking mode: 'github' for port forwarding, 'cloudflare' for named tunnels"
+    },
+    "ddevDomain": {
+      "type": "string",
+      "default": "",
+      "description": "The project's DDEV domain (e.g. 'myproject.ddev.site')"
+    },
+    "hosts": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated key=hostname pairs for tunnel mode (e.g. 'main=myproject.cs.genero-dev.com,fi=fi-myproject.cs.genero-dev.com')"
+    },
+    "ddevHosts": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated key=ddev-hostname pairs for multisite subsites (e.g. 'fi=fi.myproject.ddev.site'). Main site uses ddevDomain."
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/ddev/ddev/install-ddev"
+  ]
+}
