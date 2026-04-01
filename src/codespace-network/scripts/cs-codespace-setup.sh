@@ -11,15 +11,19 @@ set -eu
 #   - Production DB snapshot import + URL search-replace
 #
 # Usage: cs-codespace-setup.sh [repo]
-#   repo: GitHub repo (e.g. "generoi/btbtransformers"). Defaults to $GITHUB_REPOSITORY.
+#   repo: GitHub repo (e.g. "generoi/btbtransformers").
+#   Defaults to the repo option in devcontainer-feature.json, then $GITHUB_REPOSITORY.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=cs-network-lib.sh
+source "$SCRIPT_DIR/cs-network-lib.sh"
+cs_net_load_config
 
 # Log all output for debugging (viewable via: cat /tmp/codespace-setup.log)
 exec > >(tee -a /tmp/codespace-setup.log) 2>&1
 echo "=== Codespace setup started at $(date -u) ==="
 
-REPO="${1:-${GITHUB_REPOSITORY:-}}"
+REPO="${1:-${CS_NET_REPO:-${GITHUB_REPOSITORY:-}}}"
 
 # --- Docker ---
 while ! docker info >/dev/null 2>&1; do sleep 1; done

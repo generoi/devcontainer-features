@@ -24,6 +24,11 @@
       "type": "string",
       "default": "",
       "description": "Comma-separated key=ddev-hostname pairs for multisite subsites (e.g. 'fi=fi.myproject.ddev.site'). Main site uses ddevDomain."
+    },
+    "repo": {
+      "type": "string",
+      "default": "",
+      "description": "GitHub repo for production snapshot downloads (e.g. 'generoi/btbtransformers'). Defaults to $GITHUB_REPOSITORY."
     }
   },
   "installsAfter": [

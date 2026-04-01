@@ -10,11 +10,21 @@ CS_NET_MODE="${MODE:-github}"
 CS_NET_DDEV_DOMAIN="${DDEVDOMAIN:-}"
 CS_NET_HOSTS="${HOSTS:-}"
 CS_NET_DDEV_HOSTS="${DDEVHOSTS:-}"
+CS_NET_REPO="${REPO:-}"
 EOF
 
 # Copy scripts
 cp -r scripts/* "$INSTALL_DIR/"
 chmod +x "$INSTALL_DIR"/*.sh
+
+# Add convenience commands to PATH
+cat > /usr/local/bin/import-production <<'SCRIPT'
+#!/bin/bash
+set -eu
+source /usr/local/share/codespace-network/config.env
+exec /usr/local/share/codespace-network/cs-import-production.sh "${CS_NET_REPO:-$GITHUB_REPOSITORY}"
+SCRIPT
+chmod +x /usr/local/bin/import-production
 
 # Install cloudflared for tunnel mode
 if [ "${MODE:-github}" = "cloudflare" ]; then

@@ -3,11 +3,15 @@ set -eu
 
 # Re-import the latest production snapshot inside a running Codespace.
 # Usage: cs-import-production.sh [repo]
-#   repo: GitHub repo (e.g. "generoi/btbtransformers"). Defaults to $GITHUB_REPOSITORY.
+#   repo: GitHub repo (e.g. "generoi/btbtransformers").
+#   Defaults to the repo option in devcontainer-feature.json, then $GITHUB_REPOSITORY.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=cs-network-lib.sh
+source "$SCRIPT_DIR/cs-network-lib.sh"
+cs_net_load_config
 
-REPO="${1:-${GITHUB_REPOSITORY:-}}"
+REPO="${1:-${CS_NET_REPO:-${GITHUB_REPOSITORY:-}}}"
 if [ -z "$REPO" ]; then
   echo "Error: Pass the repo as an argument or set GITHUB_REPOSITORY." >&2
   exit 1
