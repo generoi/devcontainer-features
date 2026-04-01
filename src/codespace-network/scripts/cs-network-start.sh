@@ -14,6 +14,14 @@ cs_net_resolve_hosts
 
 echo "=== Codespace Network: start ($CS_NET_MODE mode) ==="
 
+# cd to project directory (postStartCommand may run from /home/vscode)
+if [ -n "${CS_NET_DDEV_DOMAIN:-}" ]; then
+  PROJECT_DIR=$(find /workspaces -maxdepth 1 -mindepth 1 -type d 2>/dev/null | head -1)
+  if [ -n "$PROJECT_DIR" ] && [ -d "$PROJECT_DIR/.ddev" ]; then
+    cd "$PROJECT_DIR"
+  fi
+fi
+
 # Restore /etc/hosts entries (Docker regenerates /etc/hosts on restart)
 cs_net_ensure_hosts_file
 
