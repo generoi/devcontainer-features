@@ -1,5 +1,4 @@
 #!/bin/bash
-set -eu
 
 # Full Codespace setup for DDEV WordPress projects.
 # Called as postCreateCommand. Handles everything:
@@ -14,13 +13,20 @@ set -eu
 #   repo: GitHub repo (e.g. "generoi/btbtransformers").
 #   Defaults to the repo option in devcontainer-feature.json, then $GITHUB_REPOSITORY.
 
+# Log ALL output (stdout + stderr) to file. Use script(1) for reliable
+# capture — process substitution with tee can lose output on abrupt exit.
+LOG_FILE="/tmp/codespace-setup.log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+# Exit on error but log the failure first
+set -eu
+trap 'echo "=== Setup FAILED at $(date -u) (line $LINENO, exit $?) ===" | tee -a "$LOG_FILE"' ERR
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=cs-network-lib.sh
 source "$SCRIPT_DIR/cs-network-lib.sh"
 cs_net_load_config
 
-# Log all output for debugging (viewable via: cat /tmp/codespace-setup.log)
-exec > >(tee -a /tmp/codespace-setup.log) 2>&1
 echo "=== Codespace setup started at $(date -u) ==="
 
 REPO="${1:-${CS_NET_REPO:-${GITHUB_REPOSITORY:-}}}"
