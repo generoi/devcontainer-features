@@ -12,6 +12,18 @@ source "$SCRIPT_DIR/cs-network-lib.sh"
 cs_net_load_config
 cs_net_resolve_hosts
 
+# Source Codespace secrets if not already in env
+SECRETS_ENV="/workspaces/.codespaces/shared/.env"
+if [ -f "$SECRETS_ENV" ]; then
+  while IFS= read -r line; do
+    [[ -z "$line" || "$line" =~ ^# || ! "$line" =~ = ]] && continue
+    key="${line%%=*}"
+    value="${line#*=}"
+    [[ "$key" =~ [[:space:]] || "$key" =~ ^- ]] && continue
+    export "$key=$value"
+  done < "$SECRETS_ENV"
+fi
+
 echo "=== Codespace Network: start ($CS_NET_MODE mode) ==="
 
 # cd to project directory (postStartCommand may run from /home/vscode)
