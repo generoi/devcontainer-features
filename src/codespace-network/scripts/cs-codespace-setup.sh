@@ -76,7 +76,7 @@ curl -fsSL https://claude.ai/install.sh | bash
 # --- Dependencies & build ---
 ddev composer install
 ddev npm install
-ddev npm run build
+ddev npm run build || echo "::warning::npm run build failed — site may work with stale assets"
 
 # --- Production snapshot ---
 if [ -n "${DB_ARTIFACT_KEY:-}" ] && [ -n "$REPO" ]; then
