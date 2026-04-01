@@ -1,7 +1,7 @@
 {
   "name": "Codespace Network",
   "id": "codespace-network",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Configures Codespace networking for DDEV WordPress projects. Supports GitHub port forwarding and Cloudflare named tunnels.",
   "options": {
     "mode": {
