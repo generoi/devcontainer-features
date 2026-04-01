@@ -21,6 +21,7 @@ cs_net_load_config() {
 # Sets associative array CS_NET_PARSED.
 cs_net_parse_pairs() {
   local input="$1"
+  declare -gA CS_NET_PARSED
   CS_NET_PARSED=()
   [ -z "$input" ] && return
   IFS=',' read -ra pairs <<< "$input"
@@ -36,11 +37,14 @@ cs_net_parse_pairs() {
 # For cloudflare mode, reads from CS_NET_HOSTS config.
 # Sets associative array CS_NET_TARGET_HOSTS.
 cs_net_resolve_hosts() {
+  declare -gA CS_NET_TARGET_HOSTS
   CS_NET_TARGET_HOSTS=()
 
   if [ "$CS_NET_MODE" = "github" ]; then
     local fwd_domain="${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-app.github.dev}"
-    CS_NET_TARGET_HOSTS[main]="${CODESPACE_NAME}-80.${fwd_domain}"
+    # DDEV in Codespaces uses port 8080 (HTTP) since the router is disabled.
+    # GitHub Codespace port forwarding adds HTTPS on top.
+    CS_NET_TARGET_HOSTS[main]="${CODESPACE_NAME}-8080.${fwd_domain}"
   else
     cs_net_parse_pairs "$CS_NET_HOSTS"
     for key in "${!CS_NET_PARSED[@]}"; do
@@ -53,6 +57,7 @@ cs_net_resolve_hosts() {
 # Main site uses CS_NET_DDEV_DOMAIN, subsites from CS_NET_DDEV_HOSTS.
 # Sets associative array CS_NET_SOURCE_HOSTS.
 cs_net_resolve_source_hosts() {
+  declare -gA CS_NET_SOURCE_HOSTS
   CS_NET_SOURCE_HOSTS=()
   CS_NET_SOURCE_HOSTS[main]="$CS_NET_DDEV_DOMAIN"
 
