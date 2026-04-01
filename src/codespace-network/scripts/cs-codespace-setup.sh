@@ -53,7 +53,7 @@ ddev poweroff 2>/dev/null || true
 # --- Git submodules ---
 # Rewrite SSH to HTTPS for Codespace environments (no SSH keys)
 git config --global url."https://github.com/".insteadOf "git@github.com:"
-git submodule update --init --recursive
+git submodule update --init --recursive --force 2>/dev/null || true
 
 ddev start
 
